@@ -1,0 +1,13 @@
+{
+  "name": "adivina-quien-pokemon",
+  "version": "1.0.0",
+  "description": "Juego Adivina Quién Pokémon con Hilos y Sockets",
+  "main": "server/server.js",
+  "scripts": {
+    "start": "node server/server.js"
+  },
+  "dependencies": {
+    "uuid": "^9.0.0",
+    "ws": "^8.21.0"
+  }
+}

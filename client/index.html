@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Adivina Quién · Pokémon</title>
+  <link rel="stylesheet" href="style.css">
+  <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Nunito:wght@400;600;700;900&display=swap" rel="stylesheet">
+</head>
+<body>
+
+  <!-- ════════════════════════════════════════════
+       PANTALLA: CARGANDO / CONECTANDO
+       ════════════════════════════════════════════ -->
+  <div id="screen-connecting" class="screen active">
+    <div class="connect-box">
+      <div class="pokeball-loader">
+        <div class="ball-top"></div>
+        <div class="ball-middle"><div class="ball-button"></div></div>
+        <div class="ball-bottom"></div>
+      </div>
+      <h1 class="game-title">Adivina Quién</h1>
+      <p class="subtitle">Pokémon Edition</p>
+      <p id="connect-status" class="status-msg">Conectando al servidor...</p>
+    </div>
+  </div>
+
+  <!-- ════════════════════════════════════════════
+       PANTALLA: EN ESPERA
+       ════════════════════════════════════════════ -->
+  <div id="screen-waiting" class="screen">
+    <div class="connect-box">
+      <div class="pokeball-loader pulse">
+        <div class="ball-top"></div>
+        <div class="ball-middle"><div class="ball-button"></div></div>
+        <div class="ball-bottom"></div>
+      </div>
+      <h2 class="wait-title">Buscando Oponente</h2>
+      <p class="status-msg">Esperando que otro entrenador se conecte...</p>
+      <div class="dots-loader"><span></span><span></span><span></span></div>
+    </div>
+  </div>
+
+  <!-- ════════════════════════════════════════════
+       PANTALLA: JUEGO PRINCIPAL
+       ════════════════════════════════════════════ -->
+  <div id="screen-game" class="screen">
+
+    <!-- HEADER DEL JUEGO -->
+    <header class="game-header">
+      <div class="header-left">
+        <h1 class="game-title-sm">Adivina Quién <span>Pokémon</span></h1>
+      </div>
+      <div class="header-center">
+        <div id="turn-indicator" class="turn-indicator">
+          <span id="turn-text">Turno de...</span>
+        </div>
+      </div>
+      <div class="header-right">
+        <div class="my-secret-box">
+          <p class="secret-label">Mi personaje:</p>
+          <div class="secret-pokemon">
+            <img id="my-secret-img" src="" alt="">
+            <span id="my-secret-name"></span>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <!-- ÁREA PRINCIPAL DEL JUEGO -->
+    <main class="game-main">
+
+      <!-- TABLERO DE POKÉMON -->
+      <section class="board-section">
+        <h2 class="section-title">Tablero de Personajes</h2>
+        <p class="section-hint">Haz clic en un Pokémon para eliminarlo del tablero (ya descartado)</p>
+        <div id="pokemon-board" class="pokemon-board">
+          <!-- Se genera dinámicamente -->
+        </div>
+      </section>
+
+      <!-- PANEL DE ACCIONES Y LOG -->
+      <aside class="action-panel">
+
+        <!-- LOG DE EVENTOS -->
+        <div class="game-log-section">
+          <h3 class="panel-title">📋 Registro de Juego</h3>
+          <div id="game-log" class="game-log">
+            <p class="log-entry log-system">La partida ha comenzado.</p>
+          </div>
+        </div>
+
+        <!-- ACCIONES (solo visible en tu turno) -->
+        <div id="actions-container" class="actions-container">
+
+          <!-- PREGUNTAR -->
+          <div class="action-card" id="pregunta-section">
+            <h3 class="action-title">🔍 Hacer una Pregunta</h3>
+            <p class="action-hint">La respuesta es sobre el personaje de tu oponente</p>
+            <select id="pregunta-select" class="pregunta-select">
+              <option value="">-- Elige una pregunta --</option>
+            </select>
+            <button id="btn-preguntar" class="btn btn-preguntar" onclick="hacerPregunta()">
+              Hacer Pregunta
+            </button>
+          </div>
+
+          <!-- ADIVINAR -->
+          <div class="action-card" id="adivinar-section">
+            <h3 class="action-title">⚡ Adivinar Personaje</h3>
+            <p class="action-hint warning-text">¡Cuidado! Si fallas, pierdes inmediatamente</p>
+            <div id="adivinar-selected" class="adivinar-selected">
+              <p class="no-selection">Haz clic en un Pokémon del tablero para seleccionar</p>
+            </div>
+            <button id="btn-adivinar" class="btn btn-adivinar" disabled onclick="hacerAdivinanza()">
+              ¡Adivinar!
+            </button>
+          </div>
+
+        </div>
+
+        <!-- MENSAJE "NO ES TU TURNO" -->
+        <div id="waiting-turn" class="waiting-turn hidden">
+          <div class="waiting-turn-inner">
+            <div class="pokeball-mini">
+              <div class="ball-top"></div>
+              <div class="ball-middle"><div class="ball-button"></div></div>
+              <div class="ball-bottom"></div>
+            </div>
+            <p>Esperando al oponente...</p>
+          </div>
+        </div>
+
+      </aside>
+    </main>
+  </div>
+
+  <!-- ════════════════════════════════════════════
+       PANTALLA: FIN DEL JUEGO
+       ════════════════════════════════════════════ -->
+  <div id="screen-gameover" class="screen">
+    <div class="gameover-box">
+      <div id="gameover-icon" class="gameover-icon">🏆</div>
+      <h2 id="gameover-title" class="gameover-title">¡Ganaste!</h2>
+      <p id="gameover-msg" class="gameover-msg"></p>
+
+      <div class="secrets-reveal">
+        <h3>Personajes Secretos</h3>
+        <div class="secrets-grid">
+          <div class="secret-reveal-card">
+            <p>Tu personaje era:</p>
+            <img id="reveal-my-img" src="" alt="">
+            <p id="reveal-my-name" class="reveal-name"></p>
+          </div>
+          <div class="secret-reveal-card">
+            <p>El de tu oponente:</p>
+            <img id="reveal-opp-img" src="" alt="">
+            <p id="reveal-opp-name" class="reveal-name"></p>
+          </div>
+        </div>
+      </div>
+
+      <button class="btn btn-replay" onclick="location.reload()">
+        🔄 Jugar de Nuevo
+      </button>
+    </div>
+  </div>
+
+  <script src="game.js"></script>
+</body>
+</html>
