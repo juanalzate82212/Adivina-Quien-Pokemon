@@ -156,13 +156,3 @@ guess-who/
 4. **Aislamiento de partidas**: Los Workers no comparten memoria entre sí
 
 ---
-
-## 🃏 Agregar tus propias imágenes de Pokémon
-
-1. Coloca tus imágenes en `client/img/`
-2. En `server/pokemon-data.js`, cambia la propiedad `img` de cada Pokémon:
-   ```javascript
-   img: "/img/pikachu.png"  // Imagen local
-   // En vez de:
-   img: "https://raw.githubusercontent.com/PokeAPI/..."  // URL externa
-   ```
